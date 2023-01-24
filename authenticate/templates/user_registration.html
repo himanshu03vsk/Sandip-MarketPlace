@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+
+    label{
+        width:20%;
+    }
+
+    body{
+        background-image: url({% static 'img/register-bg.jpg' %});
+        background-size: 100%;
+        background-repeat: no-repeat;
+        
+    }
+    #nav{
+        margin: auto;
+    }
+
+    .sub{
+        background-color: #1571bc;
+        margin-left: 50px;
+        margin-bottom: 20px;
+    }
+    .form-input{
+        width: 40%;
+        border-radius: 4px;
+        border-color:brown;
+        color: #000000;
+        margin-top: 20px;
+        margin-left: 20%
+    }
+
+    .container{
+        display: flex;
+        color: #000000;
+    }
+
+    .child{
+        width: 35%;
+        background-color:rgb(158 173 180 / 59%);
+        border-radius: 10px;
+        margin-right: 12px;
+        padding-left: 12px;
+    }
+
+    .dchild{
+        flex-grow: 1;
+        background-color: #00000082;
+        border-radius: 12px;
+    }
+    h2{
+
+        text-align: inherit;
+        color: #ffffff;
+        margin-top: 25%;
+
+    }
+
+    #buying{
+        background-color: #ffffff;
+        border-radius: 4px;
+        color: #000000;
+    }
+{% endblock style %}
+
+{% block nav %}
+<nav class="navbar bg-light">
+    <div  class="container-fluid">
+      <a id="nav" class="navbar-brand" href="#">
+        <img src="{% static 'img/logo.png' %}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+        Auction House
+      </a>
+    </div>
+  </nav>{% endblock nav %}
+  
+{% block body %}
+<br>
+<div class="container">
+    <div class="child">
+    <form action="{% url 'user_registration' %}" method="post">
+        {% csrf_token %}
+       
+        {{form.email.label_tag}}{{form.email}}<br>
+        {{ form.user_id.label_tag }}{{ form.user_id }}<br>
+        {{form.fname.label_tag}}{{form.fname}}<br>
+        {{form.lname.label_tag}}{{form.lname}}<br>
+        {{form.password1.label_tag}}{{form.password1}}<br>
+        {{form.password2.label_tag}}{{form.password2}}<br>
+       
+        {{form.city.label_tag}}{{form.city}}<br>
+        {{form.country.label_tag}}{{form.country}}<br>
+        {{form.institute.label_tag}}{{form.institute}}<br>
+        {% for field in form %}
+        <p>
+        {% for error in field.errors %}
+        <p style="color:red">{{error}}</p>
+        {% endfor %}
+        </p>
+        {% endfor %}
+        {% if form.non_field_errors %}
+        <div style="color:red">
+            <p>{{form.non_field_errors}}</p>
+        </div>
+        {% endif %}
+          
+        <input class="form-input sub" type="submit" value="Submit">
+    </form>
+    </div>
+
+    <div class="dchild">
+        <h2>Register yourself to enter the <br>world of simplicity and ease of <b id='buying'>buying</b></h2>
+        </div>
+</div>
+{% endblock body %}
+

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+block {% block title %}Buy{% endblock title %}
+
+{% block body %}
+
+{% if messages %}
+{% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+    <h1>Here you will buy stuff</h1>
+    <form action="/buy" >
+        {% csrf_token %}
+        <input type="submit" value="buy" />
+    </form>
+{% endblock body %}

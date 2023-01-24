@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+block {% block title %}Auction{% endblock title %}
+{% block body %}
+
+    <button ><a href="/buy">Visit W3Schools.com!</a></button>
+    <form>
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="submit"/>
+    </form>
+{% endblock body %}

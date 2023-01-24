@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Home
+{% endblock title %}
+
+{% block body %}
+<a href="admin">admin</a>
+    
+    {% if request.user.is_authenticated %}
+        <h3>Hello {{name}}</h3>
+        <a href="logout">Logout</a>
+    {% endif %}
+        
+    <button ><a href="{% url 'buy' %}">Buy</a></button>
+    <button ><a href="{% url 'sell' %}">Post an Ad</a></button>
+    <h1>This is the index page</h1>
+    <br>
+    <h1>This is our homepage</h1>
+    <h2>These are the listings</h2>
+
+    
+    {% comment %} {{listings.values}} {% endcomment %}
+    {% for item_obj in listings.values %}       {% comment %}[item, [item_image]]{% endcomment %}
+        
+        {% comment %} {{"Ix am here"}} {% endcomment %}
+        <br>{{item_obj.0.item_name}}<br>
+        <b>{{item_obj.0.item_description}}</b><br>
+        <b>{{item_obj.0.item_category}}</b>
+        {% for image in item_obj.1 %}
+            <img src="{{image}}">
+        {% endfor %}
+    {% endfor %}
+{% endblock body %}
