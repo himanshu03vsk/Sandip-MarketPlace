@@ -1,20 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
-from .models import customer, orders, selling_item, auction_item, auction, bid, images
+from .models import Customer, Order, SellingItem, Auction, Bid, Image
 
 
 # # Register your models here.
 # from .models import Account, selling_items, auction_items, orders
 
-admin.site.register(selling_item)
-admin.site.register(auction_item)
-admin.site.register(orders)
+admin.site.register(SellingItem)
+admin.site.register(Order)
 # # admin.site.register(Account)
-admin.site.register(customer)
-admin.site.register(auction)
-admin.site.register(bid)
-admin.site.register(images)
+admin.site.register(Customer)
+admin.site.register(Auction)
+admin.site.register(Bid)
+admin.site.register(Image)
 
 
 

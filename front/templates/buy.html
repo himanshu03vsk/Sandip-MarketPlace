@@ -8,9 +8,23 @@ block {% block title %}Buy{% endblock title %}
         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
 {% endfor %}
 {% endif %}
+
+
+
+{% if sold %}
+    <h2>Sorry but this item is sold</h2>    
+{% else %}
     <h1>Here you will buy stuff</h1>
     <form action="/buy" >
         {% csrf_token %}
+        <input type="text" name="fname" placeholder="First Name">
+        <input type="text" name="fname" placeholder="Last Name">
+        <input type="text" name="address1" placeholder="Flat no, Street Adress">
+        <input type="text" name="address2" placeholder="Locality">
+        <input type="text" name="address3" placeholder="City,Town">
+        <input type="text" name="address4" placeholder="State/Province/Region">
         <input type="submit" value="buy" />
     </form>
+{% endif %}
+    
 {% endblock body %}

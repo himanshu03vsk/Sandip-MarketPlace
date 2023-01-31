@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from sys import path
 path.append("..")
-from authenticate.models import selling_item, auction_item, images
+from authenticate.models import SellingItem, Image
 
 
 
@@ -35,28 +35,24 @@ from authenticate.models import selling_item, auction_item, images
 
 class SellForm(ModelForm):
     class Meta:
-        model = selling_item
-        fields = ['item_name','item_description','item_category']
+        model = SellingItem
+        fields = ['item_name','item_description','item_category', 'item_price']
         widgets = {'item_name':forms.TextInput(attrs={'class':'form-input'
                 ,'required':''},), 
                  'item_description':forms.Textarea(attrs={'class':'form-input'
                 ,'required':''}),
 
-                'item_category':forms.TextInput(attrs={'class':'form-input'})
+                'item_category':forms.TextInput(attrs={'class':'form-input', 'required':''}),
+
+                'item_price':forms.TextInput(attrs={'class':'form-input', 'required':''})
+
             
             }
 
 class ImageForm(forms.ModelForm):
     class Meta:
-        model = images
+        model = Image
         fields = ['image']
         widgets = {
             'image': forms.ClearableFileInput(attrs={'multiple': True}),
         }
-
-class AuctionForm(ModelForm):
-    class Meta:
-        model = auction_item
-        fields = ["item_name","item_description","item_category"]
-
-

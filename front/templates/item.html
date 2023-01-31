@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <form method="get" action="/buy_item">
+    <input type="hidden" name="item_id" value="{{item.item_id}}">
+    <h1>This is item {{item.item_name}}</h1>
+    <h1><b>Description</b> {{item.item_description}}</h1>
+    <h1><b>Category:</b>  {{item.item_category}}</h1>
+    <h1><b>Photos:</b></h1>
+    {% for i in images %}
+        <img src="{{i.image.url}}">
+    {% endfor %}
+    <button type="submit" class="btn btn-primary" >Buy</button>
+    </form>
+
+{% endblock body %}
+

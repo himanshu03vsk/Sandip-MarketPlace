@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
 # from .models import Account, Users
-from .models import customer
+from .models import Customer
 
 
 class Register(UserCreationForm):
@@ -81,7 +81,7 @@ class Register(UserCreationForm):
 
 
     class Meta:
-        model = customer
+        model = Customer
         fields = ('email', 'fname', 'lname', 'city', 'country', 'institute', )
         # labels = {'user_id': 'Enter User ID','fname':'First Name', 'lname':'Last Name', 'password':'Password', 'email':'Email', 'city':'City', 'country':'Country', 'institute':'Institute Name'}
     

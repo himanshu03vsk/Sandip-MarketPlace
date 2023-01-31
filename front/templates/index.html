@@ -17,17 +17,18 @@
     <br>
     <h1>This is our homepage</h1>
     <h2>These are the listings</h2>
+    <br>
 
     
     {% comment %} {{listings.values}} {% endcomment %}
     {% for item_obj in listings.values %}       {% comment %}[item, [item_image]]{% endcomment %}
         
         {% comment %} {{"Ix am here"}} {% endcomment %}
-        <br>{{item_obj.0.item_name}}<br>
-        <b>{{item_obj.0.item_description}}</b><br>
-        <b>{{item_obj.0.item_category}}</b>
+        <br>{{ item_obj.0.item_name }}<br>
+        <b>{{ item_obj.0.item_description }}</b><br>
+        <b>{{ item_obj.0.item_category }}</b><br>
         {% for image in item_obj.1 %}
-            <img src="{{image}}">
+            <a  href="{% url 'view_item' item_obj.0.item_id %}"><img width="300px" src="{{ image }}"></a><br>
         {% endfor %}
     {% endfor %}
 {% endblock body %}
