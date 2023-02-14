@@ -17,5 +17,10 @@ urlpatterns = [
     path("post_ad", views.postad, name="posting_ad"),
     path("post_auction", views.postauction, name="post_auction"),
     path("item/<int:item_id>", views.view_item, name="view_item"),
+    path("save_ad", views.save_address, name="save_address"),
+    path("ajax/add_to_wishlist", views.add_to_wish, name="add_to_wish"),
+    path("ajax/is_wishlisted", views.check_if_wish, name="is_wishlisted"),
+    path("ajax/remove_from_wishlist", views.remove_from_wish, name="remove_from_wish"),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

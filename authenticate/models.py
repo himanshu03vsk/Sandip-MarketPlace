@@ -98,3 +98,26 @@ class Image(models.Model):
 
     def __str__(self) -> str:
         return self.item_id.item_name
+
+
+class Address(models.Model):
+    user_id             = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
+    
+    phone               = models.CharField(max_length=20)
+    address1            = models.CharField(max_length=50)
+    address2            = models.CharField(max_length=200)
+    address3            = models.CharField(max_length=120)
+    city                = models.CharField(max_length=120)
+    state               = models.CharField(max_length=100)
+    country             = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.user_id.fname + "'s Address"
+
+    
+class Wishlist(models.Model):
+    wishlist_owner_id               = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
+    item_id                         = models.ForeignKey(SellingItem, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.item_id.item_name + "wished by " + self.wishlist_owner_id.fname

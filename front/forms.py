@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from sys import path
 path.append("..")
-from authenticate.models import SellingItem, Image
+from authenticate.models import SellingItem, Image, Address
 
 
 
@@ -56,3 +56,10 @@ class ImageForm(forms.ModelForm):
         widgets = {
             'image': forms.ClearableFileInput(attrs={'multiple': True}),
         }
+
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        exclude = ['user_id']
+        

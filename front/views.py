@@ -1,17 +1,16 @@
 from django.shortcuts import render
-
 # from .forms import NameForm
-from .forms import SellForm, ImageForm
+from .forms import SellForm, ImageForm, AddressForm
 from sys import path
 
 path.append("..")
-
-from authenticate.models import SellingItem, Image
+from django.urls import reverse
+from authenticate.models import SellingItem, Image, Address, Wishlist,Customer
 from django.shortcuts import render
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 
 
 
@@ -31,14 +30,25 @@ def home(request):
         return render(request, "index.html", {"name": name, "listings": item_set})
     return render(request, "index.html")
 
-
+@login_required(login_url=login_url)
 def buy(request):
     req_item = SellingItem.objects.get(pk=request.GET["item_id"])
+
     if req_item.is_sold:
         return render(request, "buy.html", {"sold": True})
     
-    
-    return render(request, "buy.html")
+    addresses = Address.objects.filter(user_id=request.user)
+
+
+    no_address = None
+    if bool(addresses)== False:
+        # print(" ia m here")
+        form = AddressForm()
+        no_address = True
+        return render(request, "buy.html", {"form": form, "address_flag": no_address})
+     
+    return render(request, "buy.html", {"addresses": addresses})
+
 
 @login_required(login_url=login_url)
 def sell(request):
@@ -70,9 +80,66 @@ def view_item(request, item_id):
     print(item.item_id)
     return render(request, "item.html", {"item":item, "images": item.image_set.all()})
 
+@login_required(login_url=login_url)
+def save_address(request):
+    if request.method == "POST":
+        print(request.POST)
+        # break
+        form = AddressForm(data=request.POST)
+        print(form.is_valid())
+        f = form.save(commit=False)
+        f.user_id = request.user
+        next = request.POST.get('next', '/')
+        if form.is_valid():
+            f.save()
+            print("redirected")
+            return HttpResponseRedirect(next)
+        else:
+            # print(form.errors)
+            messages.error(request, "There was an error in saving the address, please try again")
+            return render(request, "buy.html")
+
+def add_to_wish(request):
+    print("request send")
+    item_id = request.GET.get('item_id', None)
+    user = request.GET.get('user', None)
+    item = SellingItem.objects.get(item_id=item_id)
+    data = {}
+    # if Wishlist.objects.filter(wishlist_owner_id=user, item_id=item_id).exists():
+    #     data["exists"] = True
+    #     return JsonResponse(data)
+    wish_entry = Wishlist.objects.create(wishlist_owner_id=request.user, item_id=SellingItem.objects.get(item_id=item_id))
+    wish_entry.save()
+    data["success"] = True
+    return JsonResponse(data)
 
 
 
+
+def check_if_wish(request):
+    item_id = request.GET.get('item_id', None)
+    user = request.GET.get('user', None)
+    data = {}
+    if Wishlist.objects.filter(wishlist_owner_id=user, item_id=item_id).exists():
+        data["exists"] = True
+        return JsonResponse(data)
+    data["exists"] = False
+    print("item not there")
+    return JsonResponse(data)
+
+
+
+
+
+def remove_from_wish(request):
+    item_id = request.GET.get('item_id', None)
+    user = request.GET.get('user', None)
+    data = {}
+    Wishlist.objects.filter(wishlist_owner_id=user, item_id=item_id).delete()
+    data["exists"] = False
+    print("removed")
+    messages.success(request, "Successfully removed the item from the wishlist")
+    return JsonResponse(data)
 
 def auction(request):
     #save the form if it is valid using fs.save(commit=False)
