@@ -3,7 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
 # from .models import Account, Users
 from .models import Customer
-
+CHOICES = (('mumbai','Mumbai'), ('delhi','Delhi '), ('bengluru','Bengaluru'), ('hydrabad','Hyderabad '), ('ahmadabad','Ahmadabad'),
+ ('chennai','Chennai '), ('kolkata','Kolkata '), ('surat','Surat '), ('pune','Pune '), ('jaipur','Jaipur '), ('lucknow','Lucknow ') ,('nashik','Nashik'),
+( 'nagpur','Nagpur') ,('indore','Indore') ,('thane','Thane'))
 
 class Register(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(attrs={
@@ -43,17 +45,10 @@ class Register(UserCreationForm):
     }),max_length=255)
     
     
-    city = forms.CharField(widget=forms.TextInput(attrs={
+    city = forms.ChoiceField(choices=CHOICES,widget=forms.Select(attrs={
         'class': 'form-input',
-        'required':'',
-        'name':'city',
-        'id':'city',
-        'type':'text',
-        'placeholder':'Mumbai',
-        'maxlength':'50',
-        'minlength':'6'
 
-    }),max_length=255)
+    }))
 
     country = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-input',

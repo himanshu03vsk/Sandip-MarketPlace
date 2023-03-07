@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+    
+    {% for i in items %}
+        <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_sale}}</a><br>
+        {{i.buyer_id}}<br>
+        {{i.address}}<br>
+        {{i.payment_method}}<br>
+        {{i.created_at}}<br>
+        <br>
+        <br>
+
+
+    {% endfor %}
+        
+{% endblock body %}

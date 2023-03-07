@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h1>This is payment</h1>
+
+<a href="{% url 'add_payment' %}"><button class="btn btn-primary" type="button">Add Card</button></a><br>
+    
+    {% for i in payment_forms %}  
+
+        {{i.card_holder_name}}<br>
+        XXXX-XXXX-XXXX-{{i.card_number|slice:"-4:"}}<br>
+        {{i.expiry}} 
+        <a href="{% url 'view_payment' i.payment_id %}">
+            <button id="rmwish" type="button" class="btn btn-primary" >Edit Details</button>
+        </a><br>
+    {% endfor %}
+        
 {% endblock body %}
 

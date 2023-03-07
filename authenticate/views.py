@@ -35,6 +35,9 @@ def user_login(request):
 	return render(request, "user_login.html", context={"login_form": form})
 
 def user_reg(request):
+	if request.user.is_authenticated == True:
+		print("user not auth")
+		return render(request, "user_registration.html", {"access_denied": True})
 	if request.method == "POST":
 		# form = RegisterForm(request.POST)
 		form = Register(request.POST)

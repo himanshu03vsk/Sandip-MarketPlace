@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+
+Item Name: <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_sale.item_name}}</a><br>
+            Seller: {{i.seller_id}}<br>
+            Location: {{i.seller_id.institute}}<br>
+            Selected Address: {{i.address}}<br>
+            Payment Method: {{i.payment_method}}<br>
+            Created At: {{i.created_at}}<br>
+            Fullfilment Status: <span id="order_status_p">{{i.order_status}}</span>
+
+
+
+            
+<div class=" deliver_q">   
+{% if i.order_status is False%}
+<h3>Is the order delivered?</h3>
+    <label class="form-check-label" for="update_status">Click this button if the order has been delivered to you</label>
+    <button id="update_status" type="button" class="btn btn-primary" >Update</button>
+    {% comment %} <button type="button" id="update_status" value="update"> {% endcomment %}
+</div>
+    
+{% endif %}
+    
+
+{% endblock body %}
+
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){ 
+        
+        $("#update_status").click(function () {
+            $.ajax({
+              url: '{% url "update_fullfillment" %}',
+              data: {"order_id": "{{i.order_id}}"},
+              dataType: 'json',
+              success: function (data) {
+                if (data.success) {
+                  alert("Order Status has been updated, Please reload to see changes");
+                  $("#update_status").hide();
+                  $("#order_status_p").html('True');
+                  $(".deliver_q").hide();
+
+                  
+                }
+              }
+              
+            });
+      
+          })
+          });
+ </script>
+{% endblock javascript %}
+    

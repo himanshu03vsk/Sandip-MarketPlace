@@ -1,18 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import UserManager
+from django.core.validators import MinLengthValidator
 
 # Create your models here.
-
+CHOICES = (('mumbai','Mumbai'), ('delhi','Delhi '), ('bengluru','Bengaluru'), ('hydrabad','Hyderabad '), ('ahmadabad','Ahmadabad'),
+ ('chennai','Chennai '), ('kolkata','Kolkata '), ('surat','Surat '), ('pune','Pune '), ('jaipur','Jaipur '), ('lucknow','Lucknow ') ,('nashik','Nashik'),
+( 'nagpur','Nagpur') ,('indore','Indore') ,('thane','Thane'))
 
 class Customer(AbstractUser):
+
+    
     username =  None
     email          = models.EmailField(unique=True, primary_key=True, max_length=254)
     fname          = models.CharField(max_length=200,null=True, blank=True)
     lname          = models.CharField(max_length=200,null=True, blank=True)
     country        = models.CharField(max_length=70,null=True, blank=True)
     institute      = models.CharField(max_length=200,null=True, blank=True)
-    city           = models.CharField(max_length=200, null=True, blank=True)
+    city           = models.CharField(max_length=50, choices=CHOICES, default='mumbai', null=True, blank=True)
     last_login     = models.DateTimeField(null=True, blank=True)
 
     object  = UserManager()
@@ -59,13 +64,19 @@ class SellingItem(models.Model):
 class Order(models.Model):
     #Careful of the relationships and use on_delete wisely
     order_id            = models.AutoField(primary_key=True)
-    buyer_id            = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    seller_id           = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="seller_id", blank=True, null=True)
+    buyer_id            = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
     item_for_sale       = models.ForeignKey(SellingItem,on_delete=models.CASCADE, blank=True, null=True)
     # item_for_Auction    = models.ForeignKey(Auction_item,on_delete=models.CASCADE, blank=True, null=True)
     order_status        = models.BooleanField(default=False, null=True, blank=True)
+    address             = models.TextField(default="some building")                 
+    payment_method      = models.TextField(default="some payment")
+    card_info           = models.TextField(default="some card info")
+    price               = models.TextField(default="100", null=True, blank=True)
+    created_at          = models.DateTimeField(auto_now_add=True ,null=True, blank=True)
 
     def __str__(self):
-        return self.item_for_sale
+        return self.item_for_sale.item_name
 
 class Auction(models.Model):
     Auction_id          = models.AutoField(primary_key=True)
@@ -112,7 +123,7 @@ class Address(models.Model):
     country             = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.user_id.fname + "'s Address"
+        return self.user_id.email+ + "'s Address"
 
     
 class Wishlist(models.Model):
@@ -120,4 +131,14 @@ class Wishlist(models.Model):
     item_id                         = models.ForeignKey(SellingItem, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self) -> str:
-        return self.item_id.item_name + "wished by " + self.wishlist_owner_id.fname
+        return self.item_id.item_name + "wished by "
+
+class Payment(models.Model):
+    payment_id                      = models.AutoField(primary_key=True)
+    owner_id                        = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    card_holder_name                = models.TextField(null=True)
+    card_number                     = models.TextField(null=True, max_length=16,validators=[MinLengthValidator(16, 'The Card number must have 16 digits')])
+    expiry                          = models.DateField(null=True)
+
+    def __str__(self) -> str:
+        return self.owner_id.email + " card ending with " + self.card_number[-4:]

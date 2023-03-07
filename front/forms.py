@@ -2,8 +2,8 @@ from django import forms
 from django.forms import ModelForm
 from sys import path
 path.append("..")
-from authenticate.models import SellingItem, Image, Address
-
+from authenticate.models import SellingItem, Image, Address, Payment, Customer
+from datetime import date
 
 
 
@@ -63,3 +63,17 @@ class AddressForm(forms.ModelForm):
         model = Address
         exclude = ['user_id']
         
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        exclude = ['owner_id']
+        widgets = {
+            'expiry': forms.widgets.DateInput(attrs={'type': 'date', 'min': str(date.today())})
+        }
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['fname', 'lname','country', 'institute','city']

@@ -19,16 +19,35 @@
     <h2>These are the listings</h2>
     <br>
 
-    
+    <form method="get">
+        <select name="institute" id="inst" onchange="this.form.submit()">
+            <option selected value="">Filter by University</option>
+            {% for uni in unis %}
+                <option id="{{uni}}" value="{{uni}}">{{uni}}</option>
+            {% endfor %}
+                
+        </select>
+        {{selected_uni}} 
+    </form>  
     {% comment %} {{listings.values}} {% endcomment %}
     {% for item_obj in listings.values %}       {% comment %}[item, [item_image]]{% endcomment %}
         
         {% comment %} {{"Ix am here"}} {% endcomment %}
         <br>{{ item_obj.0.item_name }}<br>
-        <b>{{ item_obj.0.item_description }}</b><br>
         <b>{{ item_obj.0.item_category }}</b><br>
         {% for image in item_obj.1 %}
             <a  href="{% url 'view_item' item_obj.0.item_id %}"><img width="300px" src="{{ image }}"></a><br>
         {% endfor %}
     {% endfor %}
 {% endblock body %}
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+
+        $('#inst option[value="{{selected_uni}}"]').attr('selected', 'selected')
+    })
+</script>
+{% endblock javascript %}
+    

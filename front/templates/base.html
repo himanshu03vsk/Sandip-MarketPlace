@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
-  {% block javascript %}{% endblock javascript %}
-    <meta charset="UTF-8">
+  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-      
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <title></title> -->
     <!-- Export this -->
+    {% block javascript %}{% endblock javascript %}
     <style>
       a:hover{
         color: rgb(98, 98, 98);
@@ -31,6 +31,7 @@
         color: black;
         text-align: left;
      }
+
     {% block style %}
 
     {% endblock style %} 
@@ -45,29 +46,36 @@
 <body>
   {% block nav %}{% endblock nav %}
   <header>
-    <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <a class="nav-link active"  aria-current="page" href="#">Auction House</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link active" href="/buy" aria-current="page" href="#">Buy</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link active" href="/sell" aria-current="page" href="#">Sell</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link active" href="/auction" aria-current="page" href="#">Auction</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link active" href="/about" aria-current="page" href="#">About</a>
-        </li>
-        
-      </ul>
+
+    {% if request.user.is_authenticated %}
+    <nav class="navbar px-2 navbar-light bg-light navbar-expand-lg bg-body-tertiary">
+      <a class="navbar-brand " href="{% url 'home' %}">
+        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Auction House
+      </a>
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{% static 'img/avatar.png' %}" width="40" height="40" class="d-inline-block align-top" alt="">
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'history' %}">Orders</a></li>
+                <li><a class="dropdown-item" href="{% url 'buy_requests' %}">Buy requests</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'about' %}">Your Info</a></li>
+                <li><a class="dropdown-item" href="{% url 'payment_info' %}">Saved Payment Info</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     </header>
+    {% endif %}
     {% block body %}{% endblock body %}
     
 
@@ -83,6 +91,14 @@
     </div>
 
 
+    
 
 </body>
 </html>
+
+
+
+
+
+
+

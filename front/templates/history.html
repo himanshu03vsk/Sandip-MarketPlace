@@ -2,5 +2,21 @@
 
 {% block body %}
     <h1>This is history</h1>
+    {% for i in items %}
+    
+        <div>
+            Item Name: <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_sale.item_name}}</a><br>
+            Seller: {{i.seller_id}}<br>
+            Selected Address: {{i.address}}<br>
+            Payment Method: {{i.payment_method}}<br>
+            Created At: {{i.created_at}}<br>
+            Fullfilment Status: {{i.order_status}}
+          <a href="{% url 'view_order' i.order_id %}">View Order</a>
+        </div>
+      </a>
+    <br>
+    {% endfor %}
+    </form>
+        
 {% endblock body %}
 

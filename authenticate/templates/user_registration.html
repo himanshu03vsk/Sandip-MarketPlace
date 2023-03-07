@@ -74,6 +74,10 @@
   </nav>{% endblock nav %}
   
 {% block body %}
+{% if access_denied is True %} 
+    <h2>You cannot view this page becuase you are already logged in</h2>
+{% else %}
+    
 <br>
 <div class="container">
     <div class="child">
@@ -111,5 +115,6 @@
         <h2>Register yourself to enter the <br>world of simplicity and ease of <b id='buying'>buying</b></h2>
         </div>
 </div>
+{% endif %}
 {% endblock body %}
 

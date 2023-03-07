@@ -1,4 +1,9 @@
 {%extends 'base.html' %}
 {% block body %}
-<h1>This is the about page</h1>
+
+<form action="{% url 'about' %}" method="POST">
+    {% csrf_token %}
+    <h3>{{profile_form.as_p}}</h3>
+    <input type="submit" value="update">
+</form>
 {% endblock body %}
