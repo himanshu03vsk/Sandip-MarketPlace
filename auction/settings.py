@@ -41,6 +41,8 @@ STATICFILES_DIRS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "front",
     "authenticate",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -138,3 +141,11 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = "media/"
+
+
+
+
+GRAPH_MODELS ={
+    'all_applications': True,
+    'graph_models': True,
+     }

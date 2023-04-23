@@ -5,14 +5,35 @@
 <a href="{% url 'add_payment' %}"><button class="btn btn-primary" type="button">Add Card</button></a><br>
     
     {% for i in payment_forms %}  
-
+      <div class="payment-{{i.payment_id}}">
         {{i.card_holder_name}}<br>
         XXXX-XXXX-XXXX-{{i.card_number|slice:"-4:"}}<br>
         {{i.expiry}} 
         <a href="{% url 'view_payment' i.payment_id %}">
             <button id="rmwish" type="button" class="btn btn-primary" >Edit Details</button>
-        </a><br>
+        </a>
+            <button id="rmcard" type="button" class="btn btn-primary" onclick="rmcard({{i.payment_id}})" >Delete</button>
+
+        
+      </div>
+    <br>
+
     {% endfor %}
         
 {% endblock body %}
 
+
+{% block javascript %}
+    <script>
+        function rmcard(payment_id){
+            $.ajax({
+                url: '{% url "remove_card" %}',
+                data: {"payment_id":`${payment_id}`},
+                success: function(data){
+                    $(`.payment-${payment_id}`).hide()
+                }
+            })
+        }
+    </script>
+{% endblock javascript %}
+    

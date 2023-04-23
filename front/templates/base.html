@@ -3,6 +3,10 @@
 {% load static %}
 <head>
   
+  {% block head %}
+    
+  {% endblock head %}
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -53,8 +57,24 @@
         <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
         Auction House
       </a>
+
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'buy_requests' %}">Buy requests <span class="sr-only"></span></a>          
+            </li>
+    
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'listed_items' %}">Your listings <span class="sr-only"></span></a>
+            </li>
+    
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'listed_auctions' %}">Your auctions <span class="sr-only"></span></a>          
+            </li> 
+            
+    
+          </ul>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,10 +82,11 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'history' %}">Orders</a></li>
-                <li><a class="dropdown-item" href="{% url 'buy_requests' %}">Buy requests</a></li>
+
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{% url 'about' %}">Your Info</a></li>
                 <li><a class="dropdown-item" href="{% url 'payment_info' %}">Saved Payment Info</a></li>
+                <li><a class="dropdown-item" href="{% url 'view_wishlist' %}">Wishlist</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
 
               </ul>

@@ -13,6 +13,8 @@
         
     <button ><a href="{% url 'buy' %}">Buy</a></button>
     <button ><a href="{% url 'sell' %}">Post an Ad</a></button>
+    <button ><a href="{% url 'post_auction' %}">Post an Auction</a></button>
+
     <h1>This is the index page</h1>
     <br>
     <h1>This is our homepage</h1>
@@ -38,6 +40,14 @@
         {% for image in item_obj.1 %}
             <a  href="{% url 'view_item' item_obj.0.item_id %}"><img width="300px" src="{{ image }}"></a><br>
         {% endfor %}
+    {% endfor %}
+
+    {% for auction_item_obj in auction_listings.values %}
+    <br>{{ auction_item_obj.0.item_name }}<br>
+    <b>{{ auction_item_obj.0.item_category }}</b><br>
+    {% for img in auction_item_obj.1 %}
+        <a  href="{% url 'view_auction_item' auction_item_obj.0.item_id %}"><img width="300px" src="{{ img }}"></a><br>
+    {% endfor %}
     {% endfor %}
 {% endblock body %}
 

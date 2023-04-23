@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+    <h1>This is your listed items</h1>
+    {% for i in items %}
+    
+        <div id="listing-{{i.item_id}}">
+            Item Name: <a href="{% url 'view_item' i.item_id %}">{{i.item_name}}</a><br>
+            Created At: {{i.item_posted_at}}<br><br>
+            <img width="300px" src="{{i.image_set.all.0.image.url}}"></a><br><br><br>
+            <button id="delete_listing" type="button" class="btn btn-primary" onclick="delete_listing({{i.item_id}})" >Delete listing</button>
+        </div>
+        
+     
+        <hr>
+    <br>
+    {% endfor %}
+    </form>
+        
+{% endblock body %}
+
+{% block javascript %}
+
+    <script>
+        function delete_listing(item_id){
+            $.ajax({
+                url: '{% url "delete_listing" %}',
+                data: {"item_id": `${item_id}`},
+                dataType: 'json',
+                success: function (data) {
+                  if (data.success) {
+                    alert("Listing has been deleted successfully");
+                    $(`#listing-${item_id}`).hide();
+                    
+  
+                    
+                  }
+                }
+              });
+        }
+    </script>
+{% endblock javascript %}

@@ -2,9 +2,9 @@ from django import forms
 from django.forms import ModelForm
 from sys import path
 path.append("..")
-from authenticate.models import SellingItem, Image, Address, Payment, Customer
-from datetime import date
-
+from authenticate.models import SellingItem, Image, Address, Payment, Customer, AuctionItem, AuctionImage
+from datetime import date, datetime, timedelta
+from django.utils import timezone
 
 
 #FORM TOPICS FOR SELLING
@@ -41,21 +41,42 @@ class SellForm(ModelForm):
                 ,'required':''},), 
                  'item_description':forms.Textarea(attrs={'class':'form-input'
                 ,'required':''}),
-
-                'item_category':forms.TextInput(attrs={'class':'form-input', 'required':''}),
-
                 'item_price':forms.TextInput(attrs={'class':'form-input', 'required':''})
 
             
             }
 
+
+class AuctionForm(ModelForm):
+
+    class Meta:
+        model = AuctionItem
+        exclude = ["current_bid", "seller_id"]
+        
+        # str(date.date()) + " "  +str(date.hour) + ":" + str(date.minute)
+        widgets = {
+            'end_time':forms.TextInput(attrs={'type':'datetime-local', 'min': f"{str(datetime.today()+ timedelta(hours=2))[:-10]}"}),
+            'start_time':forms.TextInput(attrs={'type':'datetime-local', 'min': f"{str(datetime.today())[:-10]}"}),
+
+        }
 class ImageForm(forms.ModelForm):
+
     class Meta:
         model = Image
         fields = ['image']
         widgets = {
             'image': forms.ClearableFileInput(attrs={'multiple': True}),
         }
+
+class AuctionImageForm(forms.ModelForm):
+
+    class Meta:
+        model = AuctionImage
+        fields = ['image']
+        widgets = {
+            'image': forms.ClearableFileInput(attrs={'multiple': True}),
+        }
+
 
 
 class AddressForm(forms.ModelForm):

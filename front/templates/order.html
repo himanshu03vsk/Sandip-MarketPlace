@@ -10,13 +10,10 @@ Item Name: <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_
             Selected Address: {{i.address}}<br>
             Payment Method: {{i.payment_method}}<br>
             Created At: {{i.created_at}}<br>
-            Fullfilment Status: <span id="order_status_p">{{i.order_status}}</span>
-
-
-
-            
+            Dispatch Status: {{i.is_dispatched}}<br>
+            Fullfilment Status: <span id="order_status_p">{{i.order_status}}</span>            
 <div class=" deliver_q">   
-{% if i.order_status is False%}
+{% if i.order_status is False and i.is_dispatched%}
 <h3>Is the order delivered?</h3>
     <label class="form-check-label" for="update_status">Click this button if the order has been delivered to you</label>
     <button id="update_status" type="button" class="btn btn-primary" >Update</button>

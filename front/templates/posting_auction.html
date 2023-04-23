@@ -2,5 +2,12 @@
 
 {% block body %}
     <h1>This is posting auction</h1>
+    <div id="auction-form">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form1.as_p}}
+        {{form2.as_p}}
+        <input type="submit" value="Submit">
+    </form>
 {% endblock body %}
 

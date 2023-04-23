@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+
+    <title>OTP Validation</title>
+
+{% endblock head %}
+
+
+{% block body %}
+<form name="form2" method="POST" action="{% url 'success' %}">
+{% csrf_token %}
+<input type="password" name="otp" placeholder="Enter OTP Here" onkeypress="return /[0-9]/i.test(event.key)" maxlength="6" minlength="6">
+<input type="submit" name="opt_button" value="Authorize">
+<input type="hidden" name="otp_val_code" value="true">
+
+</form>
+{% endblock body %}
+
+
+{% block javascript %}
+    
+
+<script>  
+    
+    
+</script>
+   {% endblock javascript %}
