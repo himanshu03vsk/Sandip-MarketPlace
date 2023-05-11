@@ -54,7 +54,7 @@
     <form action='{% url "place_bid" %}' method="post">
     {% csrf_token %}
         <input type="hidden" name="item_id" value="{{item.item_id}}">
-        <input required type="number" id="bid_amount" name="bid_amount" step="  50" min="{{item.current_bid|add:50}}">
+        <input required  type="number" id="bid_amount" name="bid_amount" step="  50" min="{{item.current_bid|add:50}}">
         <input type="hidden" name="next" value="{{request.path}}">
         <button type="submit" id="place_bid" class="btn btn-primary" >Bid</button>
     </form> 

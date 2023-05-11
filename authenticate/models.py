@@ -65,7 +65,7 @@ class AuctionItem(models.Model):
     item_name               = models.CharField(max_length=256)
     item_description        = models.TextField()
     start_time              = models.DateTimeField(null=True, blank=True)
-    end_time                = models.DateTimeField(null=True, blank=True)
+    end_time                = models.DateTimeField(null=True, blank=True)       #
     posted_at               = models.DateTimeField(auto_now_add=True ,null=True,blank=True)
     starting_price          = models.FloatField(default=100.0, blank=True, null=True) 
     current_bid             = models.FloatField(blank=True, null=True)

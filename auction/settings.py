@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "front",
     "authenticate",
     "django_extensions",
+    'django_celery_beat',   
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,7 @@ TEMPLATES = [
         },
     },
 ]
+ASGI_APPLICATION = "auction.asgi.application"
 
 WSGI_APPLICATION = "auction.wsgi.application"
 
@@ -128,7 +130,9 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

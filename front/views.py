@@ -539,10 +539,10 @@ def place_bid(request):
     print(request.POST)
     # break
     Bid.objects.create(auction_item_id=AuctionItem.objects.get(pk=auction_item_id), bidder_id=user, bid_price=bid_amount)
-    item = AuctionItem.objects.get(pk=auction_item_id)
-    if float(bid_amount) > item.current_bid:
-        item.current_bid = bid_amount
-        item.save()
+    # item = AuctionItem.objects.get(pk=auction_item_id)
+    # if float(bid_amount) > item.current_bid:
+        # item.current_bid = bid_amount
+        # item.save()
     return HttpResponseRedirect(request.POST.get('next', ''))
 
 def payment(request):

@@ -55,7 +55,7 @@ class AuctionForm(ModelForm):
         
         # str(date.date()) + " "  +str(date.hour) + ":" + str(date.minute)
         widgets = {
-            'end_time':forms.TextInput(attrs={'type':'datetime-local', 'min': f"{str(datetime.today()+ timedelta(hours=2))[:-10]}"}),
+            'end_time':forms.TextInput(attrs={'type':'datetime-local', 'min': f"{str(datetime.today()+ timedelta(hours=4))[:-12]+ '00'}", 'step': 14400}),
             'start_time':forms.TextInput(attrs={'type':'datetime-local', 'min': f"{str(datetime.today())[:-10]}"}),
 
         }
