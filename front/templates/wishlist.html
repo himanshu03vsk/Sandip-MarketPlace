@@ -7,7 +7,7 @@
     <div class="item-{{item.item_id.item_id}}">
         <a href="{% url 'view_item' item.item_id.item_id %}">{{item.item_id.item_name}}<br><br>
         <img width="300px" src="{{item.item_id.image_set.all.0.image.url}}"></a><br>
-        <button id="rmwish" type="button" class="btn btn-primary" onclick="rmwish({{item.item_id.item_id}})">Remove from wishlist</button>
+        <button id="rmwish" type="button" class="btn transparent-button pop-out-button" onclick="rmwish({{item.item_id.item_id}})">Remove from wishlist</button>
     </div>
     {% endfor %}
 {% endblock body %}

@@ -2,15 +2,17 @@
 
 
 {% block body %}
-
+{% load tz %}
 <h1>This is your listed items</h1>
     {% for i in items %}
     
-        <div id="auction-listing-{{i.item_id}}">
+        <div class='item-container' id="auction-listing-{{i.item_id}}">
             Item Name: <a href="{% url 'view_auction_item' i.item_id %}">{{i.item_name}}</a><br>
             Created At: {{i.posted_at}}<br><br>
-            <img width="300px" src="{{i.auction_image_set.all.0.image.url}}"></a><br><br><br>
-            <button id="delete_listing" type="button" class="btn btn-primary" onclick="delete_listing({{i.item_id}}, 'auction')" >Delete listing</button>
+            
+            <button id="delete_listing" type="button" class="btn transparent-button pop-out-button" onclick="delete_listing({{i.item_id}}, 'auction')" >Delete listing</button>
+        <br>
+        <br>
         </div>
         
      

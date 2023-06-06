@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load tz %}
+
+{% block style %}
+
+.item-container{
+  width:500px;
+  heigth:auto;
+  border: 2px solid white;
+  border-radius:12px;
+}
+{% endblock %}
+{% block body %}
+    <h1>This is your Auction history</h1>
+    {% for i in items %}
+    
+        <div class='item-container'>
+            Item Name: <a href="{% url 'view_auction_item' i.item_id.item_id %}">{{i.item_id.item_name}}</a><br>
+            Seller: {{i.seller_id}}<br>
+            Selected Address: {{i.address}}<br>
+            Payment Method: {{i.payment_mode}}<br>
+            Created At: {{i.transaction_time}}<br>
+            Fullfilment Status: {{i.order_status}}
+          <a href="{% url 'view_auction_order' i.item_id.item_id %}">View Order</a>
+        </div>
+      </a>
+    <br>
+    {% endfor %}
+
+        
+{% endblock body %}

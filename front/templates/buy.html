@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
 block {% block title %}Buy{% endblock title %}
 
+{% block style %}
+.center-container {
+  {% comment %} display: flex; {% endcomment %}
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.outline {
+  padding-top:10px;
+  width: 550px;
+  <!-- height: 250px; -->
+  border: 2px solid white;
+  outline: 2px solid white;
+  background-color: transparent;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+  transform: scale(1.1);
+}
+
+{% endblock style %}
+
 {% block body %}
-
-
 
   
 
@@ -13,28 +35,31 @@ block {% block title %}Buy{% endblock title %}
 {% elif same_user %}
     <h2> You cannot buy your own item</h2>
 {% else %}
-    
+  <br>
+    <!-- Your child elements here -->
+  <div class='center-container'>
+    <div class='outline'>
         {% if address_flag %}
         <form action="{% url 'save_address' %}" method="POST">
             {% csrf_token %}
             <h2>It looks like you haven't saved any addresses in your account, let's get you started on that</h2>
             {{form.as_p}}
             <input type="hidden" name="next" value="{{ request.path }}?item_id={{request.GET.item_id}}">
-            {{ request.path }}?item_id{{request.GET.item_id}}
-            <input type="submit" value="submit"/> 
+            <input class='pop-out-button btn transparent-button' type="submit" value="submit"/> 
         </form>
         {% elif no_payment %}
+        <p class='item-description'>It looks like you don't have any payment info saved, don't worry we are here
           <form action="{% url 'save_payment' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ request.path }}?item_id={{request.GET.item_id}}">
             {{payment_form.as_p}}
-            <input type="submit" value="submit"/> 
+            <input class='pop-out-button btn transparent-button' type="submit" value="Submit"/> 
           </form>
         {% else %}
         <form action="{% url 'success' %}" method="POST">
             {% csrf_token %}
             <h3>Address</h3>
-            <div class="form-check">
+            <div class="">
   
             {% for i in addresses %}
 
@@ -46,7 +71,7 @@ block {% block title %}Buy{% endblock title %}
             <br>
        
         {% endfor %}
-            </div>
+     
         <hr>
         
 {% comment %}         
@@ -105,7 +130,8 @@ block {% block title %}Buy{% endblock title %}
         
     </form>
 {% endif %}
-    
+  </div>
+</div>
 {% endblock body %}
 
 
@@ -179,5 +205,5 @@ block {% block title %}Buy{% endblock title %}
         </label>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+    <button type="submit" class="btn transparent-button pop-out-button">Sign in</button>
   </form> {% endcomment %}

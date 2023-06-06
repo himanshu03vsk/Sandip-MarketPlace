@@ -9,13 +9,22 @@
 
 
 {% block body %}
+<br>
+
+<div class='item-container d-flex justify-content-center'>
 <form name="form2" method="POST" action="{% url 'success' %}">
 {% csrf_token %}
-<input type="password" name="otp" placeholder="Enter OTP Here" onkeypress="return /[0-9]/i.test(event.key)" maxlength="6" minlength="6">
-<input type="submit" name="opt_button" value="Authorize">
-<input type="hidden" name="otp_val_code" value="true">
+<br>
 
+<input type="password" name="otp" placeholder="Enter OTP Here" onkeypress="return /[0-9]/i.test(event.key)" maxlength="6" minlength="6">
+<br>
+<input type="submit" name="opt_button" value="Authorize">
+<br>
+
+<input type="hidden" name="otp_val_code" value="true">
+<br>
 </form>
+</div>
 {% endblock body %}
 
 

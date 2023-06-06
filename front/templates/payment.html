@@ -2,19 +2,20 @@
 
 {% block body %}
 
-<a href="{% url 'add_payment' %}"><button class="btn btn-primary" type="button">Add Card</button></a><br>
+<a href="{% url 'add_payment' %}"><button class="btn transparent-button pop-out-button" type="button">Add Card</button></a><br>
     
     {% for i in payment_forms %}  
-      <div class="payment-{{i.payment_id}}">
+      <div class="item-container payment-{{i.payment_id}}">
+        <br>
         {{i.card_holder_name}}<br>
         XXXX-XXXX-XXXX-{{i.card_number|slice:"-4:"}}<br>
         {{i.expiry}} 
         <a href="{% url 'view_payment' i.payment_id %}">
-            <button id="rmwish" type="button" class="btn btn-primary" >Edit Details</button>
+            <button id="rmwish" type="button" class="btn transparent-button pop-out-button" >Edit Details</button>
         </a>
-            <button id="rmcard" type="button" class="btn btn-primary" onclick="rmcard({{i.payment_id}})" >Delete</button>
+            <button id="rmcard" type="button" class="btn transparent-button pop-out-button" onclick="rmcard({{i.payment_id}})" >Delete</button>
+            <br><br>
 
-        
       </div>
     <br>
 

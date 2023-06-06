@@ -1,15 +1,176 @@
 {% extends 'base.html' %}
 
-{% block body %}
-    <h1>This is posting auction</h1>
-    <div id="auction-form">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form1.as_p}}
+
+
+
+{% block style %}
+body {
+    margin: 0;
+    padding: 0;
+    {% comment %} display: flex; {% endcomment %}
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: transparent;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 800px;
+    height: auto;
+    background-color: transparent;
+    box-shadow: 0 2px 4px rgba(208, 208, 208, 0.1);
     
+  }
+  
+  .slogan {
+    width: 50%;
+    padding: 40px;
+    text-align: center;
+    opacity: 0;
+    animation: fade-in-left 1s ease-in-out forwards;
+    
+  }
+  
+  .slogan h1 {
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .slogan p {
+    font-size: 18px;
+    color: #666;
+  }
+  
+   .login-form {
+        width: 50%;
+        padding: 40px;
+        background-color: #f2f2f200;
+        opacity: 0;
         
-        {{form2.as_p}}
-        <input type="submit" value="Submit">
-    </form>
+        animation: fade-in-right 1s ease-in-out forwards;
+      }
+  .login-form h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .login-form input[type="text"],
+  .login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .login-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .login-form input[type="submit"]:hover {
+    background-color: #555;
+  }
+  @keyframes fade-in-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+
+{% endblock style %}
+{% block body %}
+    
+       
+        
+
+        <div class="container">
+            <div class="slogan">
+              <h1>Creating an auction? Nice!</h1>
+              <p>The crowd will surely love your product, Fill out the form to create an auction. Also, you can select multiple images to show off your product from different angles! Happy auctioning!</p>
+            </div>
+            <div class="login-form">
+                <form method="post" enctype="multipart/form-data">
+                    {% for field in form %}
+                    <p>
+                        {% for error in field.errors %}
+                        <p style="color:red">{{error}}</p>
+                        {% endfor %}
+                    </p>
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                    <div style="color:red">
+                        <p>{{form.non_field_errors}}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% csrf_token %}
+                    {{form1.as_p}}<br>
+                    <script>
+                        const startTime = document.getElementById("id_start_time");
+                        const endTime = document.getElementById("id_end_time");
+                        startTime.addEventListener("input", function() {
+                            const minDate = new Date(startTime.value);
+                            const isoDate = minDate.toISOString();
+                            const fullDate = isoDate.substring(0, 10);
+                            const minuteValue = startTime.value.split(":")[1];
+                            console.log(minuteValue);
+                            console.log(fullDate);
+                            const hour = minDate.getHours();
+                            console.log(hour);
+            
+                            if (parseInt(hour)% 4 === 0 && minuteValue === '00'){
+                                allowed_time = fullDate + "T" + hour+ ":00";
+                            }
+                            else {
+                                key = (4- parseInt(hour) % 4) + parseInt(hour);
+                                allowed_time = fullDate + "T" + key + ":00";
+                            }
+                            
+                            console.log(allowed_time);
+                            endTime.setAttribute("min", allowed_time);
+                            endTime.setAttribute('step', 14400);
+                        })
+                    </script>
+                    <p class='item-description'>Note: The server periodically checks the ended auctions, Please set the end times in the intervals of 4 hours from 12:00AM, eg: 4:00AM, 8:00AM, etc.</p> 
+                    {{form2.as_p}}
+        <input class="btn transparent-button pop-out-button" type="submit" value="Submit">
+
+            
+              </form>
+            </div>
+          </div>
+
+
+
 {% endblock body %}
+
 

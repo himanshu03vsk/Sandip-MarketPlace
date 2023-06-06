@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     "front",
     "authenticate",
     "django_extensions",
-    'django_celery_beat',   
+    'django_celery_beat', 
+    'django_celery_results',  
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,7 @@ ASGI_APPLICATION = "auction.asgi.application"
 
 WSGI_APPLICATION = "auction.wsgi.application"
 
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -125,12 +126,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
 USE_TZ = True
-CELERY_TIMEZONE = "UTC"
+CELERY_TIMEZONE = "Asia/Kolkata"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
@@ -146,10 +147,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = "media/"
 
-
-
-
+CELERY_BROKER_URL ='redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 GRAPH_MODELS ={
     'all_applications': True,
     'graph_models': True,
      }
+
+
+CELERY_RESULT_BACKEND = 'django-db'

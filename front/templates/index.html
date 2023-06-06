@@ -1,26 +1,20 @@
+
 {% extends 'base.html' %}
 
 {% block title %}Home
 {% endblock title %}
 
 {% block body %}
-<a href="admin">admin</a>
     
     {% if request.user.is_authenticated %}
-        <h3>Hello {{name}}</h3>
-        <a href="logout">Logout</a>
+        <h3>Hello {{request.user.fname}}</h3>
     {% endif %}
-        
-    <button ><a href="{% url 'buy' %}">Buy</a></button>
-    <button ><a href="{% url 'sell' %}">Post an Ad</a></button>
-    <button ><a href="{% url 'post_auction' %}">Post an Auction</a></button>
+    
 
-    <h1>This is the index page</h1>
-    <br>
-    <h1>This is our homepage</h1>
-    <h2>These are the listings</h2>
-    <br>
+   
 
+    <br>
+    <br> 
     <form method="get">
         <select name="institute" id="inst" onchange="this.form.submit()">
             <option selected value="">Filter by University</option>
@@ -30,25 +24,40 @@
                 
         </select>
         {{selected_uni}} 
-    </form>  
-    {% comment %} {{listings.values}} {% endcomment %}
-    {% for item_obj in listings.values %}       {% comment %}[item, [item_image]]{% endcomment %}
-        
-        {% comment %} {{"Ix am here"}} {% endcomment %}
-        <br>{{ item_obj.0.item_name }}<br>
-        <b>{{ item_obj.0.item_category }}</b><br>
-        {% for image in item_obj.1 %}
-            <a  href="{% url 'view_item' item_obj.0.item_id %}"><img width="300px" src="{{ image }}"></a><br>
-        {% endfor %}
+    </form>
+
+    
+    <br> <br>
+    <div class="card-container">
+    {% for item_obj in listings.values %}      
+    <a href="{% url 'view_item' item_obj.0.item_id %}" class="card">
+            <img src="{{item_obj.1.0}}" alt="Item Preview">
+            <div class="details">
+                <h3 class="name">{{ item_obj.0.item_name }}</h3>
+                <p class="category">{{ item_obj.0.item_category }}</p>
+                <p class="price">{{ item_obj.0.item_price }}</p>
+            </div>
+
+    </a>
     {% endfor %}
+</div>
+    <br>
+    <hr>
+    <div class="card-container">
 
     {% for auction_item_obj in auction_listings.values %}
-    <br>{{ auction_item_obj.0.item_name }}<br>
-    <b>{{ auction_item_obj.0.item_category }}</b><br>
-    {% for img in auction_item_obj.1 %}
-        <a  href="{% url 'view_auction_item' auction_item_obj.0.item_id %}"><img width="300px" src="{{ img }}"></a><br>
+    <a href="{% url 'view_auction_item' auction_item_obj.0.item_id %}" class="card">
+    
+        <img src="{{auction_item_obj.1.0}}" alt="Item Preview">
+        <div class="details">
+            <h3 class="name">{{ auction_item_obj.0.item_name }}</h3>
+            <p class="category">{{ auction_item_obj.0.item_category }}</p>
+            <p class="price">{{ auction_item_obj.0.starting_price }}</p>
+        </div>
+
+    </a>
     {% endfor %}
-    {% endfor %}
+</div>
 {% endblock body %}
 
 
@@ -60,4 +69,70 @@
     })
 </script>
 {% endblock javascript %}
-    
+
+{% block style %}  
+.card {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    box-sizing: border-box; /* Add box sizing */
+    flex: none; /* Disable flex behavior */
+    height: 500px; /* Set a fixed height for the cards */
+    justify-content: space-between; /* Vertically align the text */
+    overflow: hidden; /* Hide any overflowing content */
+    transition: transform 0.3s; /* Add a transition for smooth animation */
+
+}
+
+
+.card img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Adjust as needed */
+    gap: 20px;
+  }
+.card img:hover {
+    transform: scale(1.1);
+}
+
+.card .details {
+    margin-top: 10px;
+    text-align: left; /* Align text to the left */
+    padding: 10px; /* Add some padding around the text */
+  overflow: hidden; /* Hide any overflowing text */
+}
+
+.card .name {
+    font-weight: bold;
+    color: black;
+    overflow: hidden; /* Hide any overflowing text */
+    text-overflow: ellipsis; /* Add an ellipsis (...) for long text */
+}
+.card:hover {
+    transform: scale(1.05); /* Apply a slight scale transformation on hover */
+  }
+  
+
+.card .category {
+    font-style: italic;
+    color: #888;
+}
+{% comment %} 
+.card:hover {
+    transform: translateY(-2px); /* Add a slight hover effect */
+} {% endcomment %}
+
+.card .price {
+    margin-top: 10px;
+    font-size: 18px;
+    color: black;
+} {% endblock style %}

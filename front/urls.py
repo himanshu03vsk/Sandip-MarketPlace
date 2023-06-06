@@ -14,7 +14,7 @@ urlpatterns = [
     path("post_auction", views.postauction, name="post_auction"),
     path("add_payment", views.add_payment, name="add_payment"),
     path("place_bid", views.place_bid, name="place_bid"),
-    # path("add_address", views.add_address, name="add_address"),
+    path("add_address", views.add_address, name="add_address"),
 
 
 
@@ -23,11 +23,17 @@ urlpatterns = [
     path("listed_items", views.listed_items, name="listed_items"),
     path("listed_auctions", views.listed_auctions, name="listed_auctions"),
     path("history", views.history, name="history"),
+    path("auction_history", views.auction_history, name="auction_history"),
     path("ongoing_auctions", views.ongoing_auctions, name="ongoing_auctions"),
     path("payment_info", views.payment, name="payment_info"),
+    path("address_info", views.address, name="address_info"),
+    
     path("buy_requests", views.buy_requests, name="buy_requests"),
+    path("auction_requests", views.auction_requests, name="auction_requests"),
+
     path("auction_item/<int:auction_item_id>", views.view_auction_item  , name="view_auction_item"),
     path("item/<int:item_id>", views.view_item  , name="view_item"),
+    path("view_address/<int:address_id>", views.view_address, name="view_address"),
     path("view_payment/<int:payment_id>", views.view_payment, name="view_payment"),
     path("wishlist", views.wishlist, name="view_wishlist"),
     path("delete_listing", views.delete_listing, name="delete_listing"),
@@ -39,6 +45,7 @@ urlpatterns = [
     path("about", views.about, name="about"),
     path("success", views.success, name="success"),
     path("view_order/<int:order_id>", views.view_order, name="view_order"),
+    path("view_auction_order/<int:order_id>", views.view_auction_order, name="view_auction_order"),
 
     
     # Ajax Paths #

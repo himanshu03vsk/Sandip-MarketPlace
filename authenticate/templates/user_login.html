@@ -1,82 +1,151 @@
-
+{% extends 'base.html' %}
 <title>User Login</title>
 
-
+{% block title %}
+User Login
+{% endblock title %}
 {% load static %}
+{% block style %}
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
-    <style>
-        #nav{
-            margin: auto;
-        }
+{% comment %} body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+} {% endcomment %}
+body {
+  margin: 0;
+  padding: 0;
+  {% comment %} display: flex; {% endcomment %}
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: transparent;
+  font-family: Arial, sans-serif;
+}
 
-        .login {
-          display: table;
-        }
-        
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 800px;
+  height: 400px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px rgba(208, 208, 208, 0.1);
+  
+}
 
+.slogan {
+  width: 50%;
+  padding: 40px;
+  text-align: center;
+  opacity: 0;
+  animation: fade-in-left 1s ease-in-out forwards;
+  
+}
 
-        .login {
-          margin-left: 35%;
-          margin-right: 35%;
-          width: 50%;
-          padding-top: 30%;
-        }
+.slogan h1 {
+  font-size: 36px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
 
-        .fields{
-          margin: 20px;
-        }
-        .container{
-          background-color: #000000a3;
-          border-radius: 69px;
-          padding-right: 20px;
-        }
+.slogan p {
+  font-size: 18px;
+  color: #666;
+}
 
-        body{
-          background-image: url({% static 'img/bg-logo.jpg' %});
-        }
+ .login-form {
+      width: 50%;
+      padding: 40px;
+      background-color: #f2f2f200;
+      opacity: 0;
+      animation: fade-in-right 1s ease-in-out forwards;
+    }
+.login-form h2 {
+  font-size: 24px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
 
-        .section {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-gap: 20px;
-          height:90%;
-          margin-right:20px;
-          margin-left: 20px;
-      }
-      .slogan{
-        padding-top: 40%;
-      }
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
 
-      #slogan {
-        border-radius: 17px;
-        background-color: #00000042;
-        color: aliceblue;
-        font-family: Copperplate, "Copperplate Gothic Light", fantasy;
-      }
+.login-form input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-{% block body %}    
+.login-form input[type="submit"]:hover {
+  background-color: #555;
+}
+@keyframes fade-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+nav{
+  background: ##2f2f2f;
+  border-bottom: 1px solid #e7d9d9;
+  background-size: cover;
+  color: #fff;
+  
+
+}
+{% endblock style %}
+{% block body %}  
+
 <nav class="navbar bg-light">
     <div  class="container-fluid">
       <a id="nav" class="navbar-brand" href="#">
-        <img src="{% static 'img/logo.png' %}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-stack" viewBox="0 0 16 16">
+          <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"></path>
+          <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"></path>
+        </svg>
         Auction House
       </a>
     </div>
   </nav>
 
-
-<div class="section">
-  <div class="slogan">
-    <h1><p id="slogan"> Just do the buying, we'll do the rest</p></h1>
-  </div>
+<br>
   <div class="container">
-    <div class="login">
+    <div class="slogan">
+      <h1>Just do the buying, we'll do the rest</h1>
+      <p>Developed with love and dedication</p>
+    </div>
+    <div class="login-form">
       <form method="POST">
         {% csrf_token %}
         {% for field in form %}
@@ -92,17 +161,14 @@
         </div>
         {% endif %}
         
-        {{login_form}}
-    <!-- <input type="text" placeholder="Username" name="userid" class="fields"><br>
-    <input type="password" class="fields" name="password" placeholder="Password"><br> -->
-    <button class="fields" type="submit">Login</button>
+        {{login_form}}<br>
+    
+    <button class="btn transparent-button pop-out-button" type="submit">Login</button>
       </form>
+    </div>
   </div>
-  <a href="register">register</a>
-</div>
-
-  
-</div>
+<br>
+  New User? What are you waiting for?<a href="register"> Register</a>
 
 
 {% endblock body %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+    
+    {% for i in items %}
+    <div class='item-container'>
+        <a href="{% url 'view_auction_item' i.item_id.item_id %}">{{i.item_id.item_name}}</a><br>
+        {{i.buyer_id}}<br>
+        {{i.address}}<br>
+        {{i.payment_method}}<br>
+        {{i.transaction_time}}<br>
+        <span id="update_status_p">{{i.is_dispatched}}</span><br><br></div>
+    {% if i.is_dispatched is False%}
+        <div class=" deliver_q-{{i.order_id}}">   
+            <h3>Is the order dispatched?</h3>
+            <label class="form-check-label" for="update_status">Click this button if the order has been dispatched from you</label>
+            <button id="update_status" type="button" class="btn transparent-button pop-out-button" onclick="update_order({{i.transaction_id}})" >Update</button>
+            {% comment %} <button type="button" id="update_status" value="update"> {% endcomment %}
+        </div>
+    <hr>
+    <br>
+
+
+    {% endif %}
+
+    {% endfor %}
+        
+{% endblock body %}
+
+
+
+{% block javascript %}
+<script>
+    
+        function update_order(order_id) {
+            $.ajax({
+              url: '{% url "update_dispatch" %}',
+              data: {"order_id": `${order_id}`, "type":"auction"},
+              dataType: 'json',
+              success: function (data) {
+                if (data.success) {
+                  alert("Order Status has been updated, Please reload to see changes");
+                  $("#update_status").hide();
+                  $("#update_status_p").html('True');
+                  $(`.deliver_q-${order_id}`).hide();
+
+                  
+                }
+              }
+              
+            });
+      
+          }
+ </script>
+{% endblock javascript %}

@@ -1,10 +1,21 @@
 {% extends 'base.html' %}
+{% load tz %}
 
+{% block style %}
+
+.item-container{
+  width:500px;
+  heigth:auto;
+  border: 2px solid white;
+  border-radius:12px;
+}
+
+{% endblock style %}
 {% block body %}
     <h1>This is history</h1>
     {% for i in items %}
     
-        <div>
+        <div class='item-container'>
             Item Name: <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_sale.item_name}}</a><br>
             Seller: {{i.seller_id}}<br>
             Selected Address: {{i.address}}<br>
@@ -15,7 +26,9 @@
         </div>
       </a>
     <br>
+    <hr>
     {% endfor %}
+
     </form>
         
 {% endblock body %}

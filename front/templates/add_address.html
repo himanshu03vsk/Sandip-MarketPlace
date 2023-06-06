@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+
+<form method="post">
+{% csrf_token %}
+{{form.as_p}}
+<input type="submit" class="btn transparent-button pop-out-button" value="Add Address">
+</form> 
+    
+{% endblock body %}

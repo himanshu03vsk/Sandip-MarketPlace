@@ -10,7 +10,7 @@ CHOICES = (('mumbai','Mumbai'), ('delhi','Delhi '), ('bengluru','Bengaluru'), ('
 
 class Customer(AbstractUser):
 
-    first_name = None
+    # first_name = None
     last_name = None
     username =  None
     email          = models.EmailField(unique=True, primary_key=True, max_length=254)
@@ -134,7 +134,10 @@ class Transaction(models.Model):
     item_id                 = models.ForeignKey(AuctionItem, on_delete=models.CASCADE)
     transaction_time        = models.DateTimeField(auto_now_add=True)
     transaction_amount      = models.FloatField()
-
+    address                 = models.TextField(null=True, blank=True)
+    payment_mode            = models.TextField(null=True, blank=True)
+    is_dispatched           = models.BooleanField(default=False, null=True, blank=True)
+    order_status            = models.BooleanField(default=False, null=True, blank=True)    
 class Bid(models.Model):
     bid_id                  = models.AutoField(primary_key=True)
     auction_item_id         = models.ForeignKey(AuctionItem ,on_delete=models.CASCADE, null=True, blank=True)
@@ -165,8 +168,8 @@ class AuctionImage(models.Model):
         return self.auction_item_id.item_name
 
 class Address(models.Model):
+    address_id          = models.AutoField(primary_key=True)
     user_id             = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
-    
     phone               = models.CharField(max_length=20)
     address1            = models.CharField(max_length=50)
     address2            = models.CharField(max_length=200)

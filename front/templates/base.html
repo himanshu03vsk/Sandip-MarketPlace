@@ -4,7 +4,7 @@
 <head>
   
   {% block head %}
-    
+   
   {% endblock head %}
     
     <meta charset="utf-8">
@@ -18,24 +18,137 @@
     <!-- Export this -->
     {% block javascript %}{% endblock javascript %}
     <style>
+      .transparent-button, button, input[type='submit'] {
+        border: 2px solid darkgray;
+        background-color: transparent;
+        color: black;
+        transition: transform 0.3s;
+        {% comment %} padding: 10px 20px; {% endcomment %}
+        margin-top: 8px;
+        {% comment %} width: 20px; {% endcomment %}
+        height:auto;
+        border-radius: 4px;
+        color:#ffffff;
+      }
+      .pop-out-button:hover {
+        transform: scale(1.1);
+      }
+
+      body{
+        background: linear-gradient(to bottom, #333333, #000000);
+        background-size: cover;
+        background-attachment: fixed;
+        color: #ffffff;
+        text-align: center;
+      }
+      * {
+        background-color: transparent;
+        color: #ffffff;
+        text-decoration:none;
+      }
+      nav
+      {
+        background: #2f2f2f;
+        border-bottom: 1px solid #e7d9d9;
+        background-size: cover;
+        color: #fff;
+        
+
+      }
+
+      
       a:hover{
-        color: rgb(98, 98, 98);
-      }  
+        
+          transform: scale(1.2);
+        
+
+      }
       a {
+        transition: transform 0.3s;
+
         color: gray;
         
         text-decoration: none;
       }
-      .footer {
-        position:relative;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: rgb(190, 190, 190);
-        color: black;
-        text-align: left;
-     }
 
+      footer {
+        background-color: #f1f1f100;
+        padding: 20px;
+        text-align: center;
+      }
+      
+      input[type="text"],
+input[type="number"],
+input[type="password"] {
+  border: 2px solid gray; /* Add gray border */
+  border-radius: 5px;
+  background-color: transparent;
+  color: white;
+  padding: 8px;
+}
+
+textarea {
+  height:31px;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px white;
+}
+
+      .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .names {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      
+      .names::after {
+        content: "  ";
+      }
+
+      .item-container{
+        width:500px;
+        heigth:auto;
+        border: 2px solid white;
+        border-radius:12px;
+      }
+      
+      .names::before {
+        content: "";
+      }
+      
+      .names:last-child::after {
+        content: "";
+      }
+      
+      .copyright {
+        font-size: 14px;
+        color: #888;
+      }
+      .dropdown-menu {
+        background-color: gray;
+      }
+      
+      .dropdown-item {
+        color: white;
+      }
+    
+      select {
+        background-color: #282828;
+        color: white;
+      }
+      
+      select option {
+        background-color: #282828;
+        color: white;
+      }
+    
     {% block style %}
 
     {% endblock style %} 
@@ -48,72 +161,96 @@
     </title>
 </head>
 <body>
-  {% block nav %}{% endblock nav %}
+  {% block nav %}
   <header>
 
     {% if request.user.is_authenticated %}
-    <nav class="navbar px-2 navbar-light bg-light navbar-expand-lg bg-body-tertiary">
-      <a class="navbar-brand " href="{% url 'home' %}">
-        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+    <nav class="navbar navbar-expand-lg navbar-dark justify-content-center pl-3">
+      <a class="navbar-brand  m-1" href="{% url 'home' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" class="bi bi-stack" viewBox="0 0 16 16">
+          <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"></path>
+          <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"></path>
+        </svg>
         Auction House
       </a>
 
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'buy_requests' %}">Buy requests <span class="sr-only"></span></a>          
-            </li>
-    
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'listed_items' %}">Your listings <span class="sr-only"></span></a>
-            </li>
-    
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'listed_auctions' %}">Your auctions <span class="sr-only"></span></a>          
-            </li> 
+                
+    <button class='btn transparent-button pop-out-button m-2' ><a href="{% url 'sell' %}">Post an Ad</a></button>
+    <button class='btn transparent-button pop-out-button m-2' ><a href="{% url 'post_auction' %}">Post an Auction</a></button>
             
-    
+            
           </ul>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="dropdown-item dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                
                 <img src="{% static 'img/avatar.png' %}" width="40" height="40" class="d-inline-block align-top" alt="">
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a class="dropdown-item" href="{% url 'auction_history' %}">Auction Order history</a></li>
                 <li><a class="dropdown-item" href="{% url 'history' %}">Orders</a></li>
 
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'about' %}">Your Info</a></li>
+                <li><a class="dropdown-item" href="{% url 'about' %}">{{request.user.fname}}'s Info</a></li>
+                <li><a class="dropdown-item" href="{% url 'address_info' %}">Your Addresses</a></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'auction_requests' %}">Auction requests <span class="sr-only"></span></a>          
+                </li>
+    
+                <li >
+                  <a class="dropdown-item" href="{% url 'buy_requests' %}">Buy requests </a>          
+                </li>
+                
+                <li >
+                  <a class="dropdown-item" href="{% url 'listed_items' %}">Your listings <span class="sr-only"></span></a>
+                </li>
+                
+                <li >
+                  <a class="dropdown-item" href="{% url 'listed_auctions' %}">Your auctions <span class="sr-only"></span></a>          
+                </li> 
+                
                 <li><a class="dropdown-item" href="{% url 'payment_info' %}">Saved Payment Info</a></li>
                 <li><a class="dropdown-item" href="{% url 'view_wishlist' %}">Wishlist</a></li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                <li><a class="dropdown-item" href="admin">Admin Panel</a></li>
 
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                
               </ul>
             </li>
           </ul>
         </div>
       </div>
     </nav>
+  
     </header>
     {% endif %}
-    {% block body %}{% endblock body %}
+
+  
+  {% endblock nav %}
+    {% block body %}
+    
+    {% endblock body %}
     
 
      <br>
      <br>
      <br>
-    <div class="footer">
-      <div class="about">
-        <p>Copyright© and Developed by: </p>
-        <p >Himanshu Vishwakarma</p>
-        <a href="/about"> Contact Us</a>
+    
+
+
+    
+     <footer>
+      <div class="footer-content">
+        <div class="names">Himanshu Vishwakarma, Ankit Mahto, Zeeshan Mawani, Arvind Menon</div>
+        <div class="copyright">
+          &copy 2023 Team InCiTe. All rights reserved.
+        </div>
       </div>
-    </div>
-
-
+    </footer>
     
-
 </body>
 </html>
 

@@ -1,19 +1,76 @@
 {% extends 'base.html' %}
 <!-- <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script> -->
-
+{% load tz %}
 {% block body %}
+
+<div class="container">
+  <div class="left">
+    <div class="image-container">
+      <img id='main-image' class="main-image" src="{{images.0.image.url}}" alt="Main Image">
+    </div>
+    <div class="item-images thumbnail-container">
+      {% for i in images %}
+      <div class="item-image"><img class='item-image thumbnail-image' src="{{i.image.url}}"></div>
+    {% endfor %}
+  </div>
+</div>
+<div class="right">
+  <p class="item-title">Item Name: {{item.item_name}}</p>
+  {{address_flag}}
+    <p class="item-price">Starting Price: {{item.starting_price}}</p>
+    {% if expired_flag %}
+    <p class='item-description'>Final Bid of <b>$<span id="item_price">{{item.transaction_set.all.0.transaction_amount}}</span></b> won by {{item.transaction_set.all.0.buyer_id.fname}}</p>
+    {% endif %}
+    {% if payment_exists and address_flag is False and expired_flag is False %}
     
-    <h1>This is item {{item.item_name}}</h1>
-    <h1><b>Category:</b>  {{item.item_category}}</h1>
-    <h1><b>Description:</b>  {{item.item_description}}</h1>
+    <form action='{% url "place_bid" %}' method="post">
+    {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{item.item_id}}">
+        <input required  type="number" id="bid_amount" name="bid_amount" step="  50" min="{{item.current_bid|add:50}}">
+        <input type="hidden" name="next" value="{{request.path}}">
+        <button type="submit" id="place_bid" class="btn transparent-button pop-out-button" >Bid</button>
+      </form> 
+      <button class="btn transparent-button pop-out-button" id='gttbl'>Go to  Bid Table</button>
+    {% elif expired_flag %}
+    <button disabled type="button" class="btn transparent-button pop-out-button">Bid</button>
+    <p>You cannot bid, This auction has been expired</p>
+    {% elif address_flag %}
+    <p> Add an Address to start bidding</p>
+    <form action="{% url 'add_address' %}" method="GET">
+      <input type="hidden" name="next" value="{{request.path}}">
+      <button id="add_payment" name='add_address' type="submit" class="btn transparent-button pop-out-button" >Add Address</button>
+    </form>
+    {% else %}
     
-    <h1><b>Starts At:</b> <span id="start-time-local"></span></h1>
-    <h1><b>Ends At:</b>  <span id="end-time-local"></span></h1>
-    <h1><b>Starting Price:</b>  {{item.starting_price}}</h1>
-    <h1><b>Location:</b>  {{item.seller_id.city}}</h1>
+        <p> Add a payment method to start bidding</p>
+      <form action="{% url 'add_payment' %}" method="GET">
+        <input type="hidden" name="next" value="{{request.path}}">
+        <button id="add_payment" name='add_payment' type="submit" class="btn transparent-button pop-out-button" >Add Payment</button>
+      </form>
+
+    {% endif %}
+    <br> 
+    <p class="item-category">Item Category: {{item.item_category}}</p>
+    <p class="item-description">Sold By: {{item.seller_id.fname}} {{item.seller_id.lname}}</p>
+
+    <p class='item-description'><b>Description:</b>  {{item.item_description}}</p>
+    {% timezone "Asia/Kolkata" %}
+    <p class='item-description'><b>Starts At:</b> {{item.start_time}}
+      </p>
+      <p class='item-description'><b>Ends At:</b> {{item.end_time}} </p>
+      {% endtimezone %}
+    <p class='item-description'><b>Location:</b>  {{item.seller_id.city}}</p>
     
+    <button id="wish" type="button" class="btn pop-out-button transparent-button" >Add to wishlist</button>
+    <button id="rmwish" type="button" class="btn transparent-button pop-out-button" >Remove from wishlist</button>
+    
+      
+
+    
+  </div>
+</div>
     <hr>
-    <table>
+    <table id='bid-table' class="bid-table">
       <tr>
         <th class="cells">Name </th>
         <th class="cells">Bid Amount</th>
@@ -29,49 +86,21 @@
         </tr>
       {% endfor %}
       </table>
-    <script>var startTime = new Date('{{item.start_time|date:"c"}}');
+    {% comment %} <script>var startTime = new Date('{{item.start_time|date:"c"}}');
       $("#start-time-local").html(startTime.toLocaleString());
       var endTime = new Date('{{item.end_time|date:"c"}}');
       $("#end-time-local").html(endTime.toLocaleString());
 
-    </script>
+    </script> {% endcomment %}
 
-
-    <h1><b>Photos:</b></h1>
+    {% comment %} <h1><b>Photos:</b></h1>
     {% for i in images %}
         <img src="{{i.image.url}}">
-    {% endfor %}
+    {% endfor %} {% endcomment %}
     
-    {% if expired_flag %}
-    <p>Final Bid: <b>$>$<span id="item_price">{{item.current_bid}}</span></b></p>
-    {% else %}  
-    <p>Current Bid: <b>$<span id="item_price">{{item.current_bid}}</span></b></p>
-    {% endif %}
-      
-
-    {% if payment_exists and expired_flag is False %}
     
-    <form action='{% url "place_bid" %}' method="post">
-    {% csrf_token %}
-        <input type="hidden" name="item_id" value="{{item.item_id}}">
-        <input required  type="number" id="bid_amount" name="bid_amount" step="  50" min="{{item.current_bid|add:50}}">
-        <input type="hidden" name="next" value="{{request.path}}">
-        <button type="submit" id="place_bid" class="btn btn-primary" >Bid</button>
-    </form> 
-    {% elif expired_flag %}
-    <button disabled type="button" class="btn btn-primary">Bid</button>
-    <p>You cannot bid, This auction has been expired</p>
-    {% else %}
-        <p> Add a payment method to start bidding</p>
-      <form action="{% url 'add_payment' %}" method="GET">
-        <input type="hidden" name="next" value="{{request.path}}">
-        <button id="add_payment" name='add_payment' type="submit" class="btn btn-primary" >Add Payment</button>
-      </form>
-
-    {% endif %}
-    <br> 
-    <button id="wish" type="button" class="btn btn-primary" >Add to wishlist</button>
-    <button id="rmwish" type="button" class="btn btn-primary" >Remove from wishlist</button>
+    {% comment %} <button id="wish" type="button" class="btn transparent-button pop-out-button" >Add to wishlist</button>
+    <button id="rmwish" type="button" class="btn transparent-button pop-out-button" >Remove from wishlist</button> {% endcomment %}
 
 
 
@@ -80,8 +109,126 @@
 {% endblock body %}
 
 {% block style %}
+.bid-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: transparent;
+}
+
+.bid-table th,
+.bid-table td {
+  border: 1px solid white;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bid-table th {
+  background-color: rgba(241, 241, 241, 0.5);
+  font-weight: bold;
+}
+
+.bid-table tbody tr:nth-child(even) {
+  background-color: rgba(249, 249, 249, 0.5);
+}
+
+.bid-table tbody tr:hover {
+  background-color: rgba(230, 230, 230, 0.5);
+}
+
+.container {
+  display: flex;
+}
+
+.left {
+  flex: 1;
+  padding: 20px;
+}
+
+.right {
+  flex: 1;
+  padding: 20px;
+  text-align: right;
+  font-size: 36px;
+  text-align: left;
+}
+
+.item-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.item-price {
+  color: green;
+  margin-bottom: 10px;
+}
+
+.item-category {
+  font-style: italic;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.item-description {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.item-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.item-image {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  background-color: gray;
+}
+
+.main-image{
+  width: 600px;
+  height: auto;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+#main-image {
+  width: 100%;
+  height: auto;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.thumbnail-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+}
+
+.thumbnail:hover {
+  opacity: 1;
+}
+
+
+
+
 .cells {
-  border: 5px solid black;
+  border: 2px solid white;
+  border-radius:2px;
 }        
 
 {% endblock style %}
@@ -92,7 +239,8 @@
 <script>
   
 
-    $(document).ready(function(){    
+    $(document).ready(function(){ 
+
       let textbox = document.querySelector("#new_bid");
       setInterval(function () {
        $.ajax({
@@ -148,7 +296,10 @@
       });
     })*/
 
-
+    $("#gttbl").click(function () {
+      var tableElement = document.getElementById('bid-table');
+      tableElement.scrollIntoView({ behavior: 'smooth' });
+    })
     $("#rmwish").click(function () {
       $.ajax({
         url: '{% url "remove_from_wish" %}',
@@ -165,7 +316,7 @@
       });
 
     })
-
+    
     $("#wish").click(function () {
         $.ajax({
           url: '{% url "add_to_wish" %}',

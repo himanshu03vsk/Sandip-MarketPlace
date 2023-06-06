@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
+{% block style %}
+
+.item-container{
+  width:500px;
+  heigth:auto;
+  border: 2px solid white;
+  border-radius:12px;
+}
+{% endblock style %}
 
 {% block body %}
-
-
+<br>
+<div class="item-container">
 Item Name: <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_sale.item_name}}</a><br>
             Seller: {{i.seller_id}}<br>
             Location: {{i.seller_id.institute}}<br>
@@ -12,14 +21,15 @@ Item Name: <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_
             Created At: {{i.created_at}}<br>
             Dispatch Status: {{i.is_dispatched}}<br>
             Fullfilment Status: <span id="order_status_p">{{i.order_status}}</span>            
-<div class=" deliver_q">   
+          </div>  
+<div class="deliver_q"> 
 {% if i.order_status is False and i.is_dispatched%}
 <h3>Is the order delivered?</h3>
     <label class="form-check-label" for="update_status">Click this button if the order has been delivered to you</label>
-    <button id="update_status" type="button" class="btn btn-primary" >Update</button>
+    <button id="update_status" type="button" class="btn transparent-button pop-out-button" >Update</button>
     {% comment %} <button type="button" id="update_status" value="update"> {% endcomment %}
 </div>
-    
+
 {% endif %}
     
 

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+<a href="{% url 'add_address' %}"><button class="btn transparent-button pop-out-button" type="button">Add Address</button></a><br><br>
+{% for i in address_forms %}  
+<div class='item-container'>    
+      <div class="address-{{i.address_id}}">
+        Phone: {{i.phone}}<br>
+        Address Line 1: {{i.address1}}<br>
+        Address Line 2: {{i.address2}}<br>
+        <a href="{% url 'view_address' i.address_id %}">
+            <button id="rmwish" type="button" class="btn transparent-button pop-out-button" >Edit Details</button>
+        </a>
+            <button id="rmcard" type="button" class="btn transparent-button pop-out-button" onclick="rmcard({{i.address_id}})" >Delete</button>
+
+        </div>
+<br>        
+      </div>
+    <br>
+
+    {% endfor %}
+        
+{% endblock body %}
+
+
+{% block javascript %}
+    <script>
+        function rmcard(address_id){
+            $.ajax({
+                url: '{% url "remove_card" %}',
+                data: {"payment_id":`${address_id}`, "type":"address"},
+                success: function(data){
+                    $(`.address-${address_id}`).hide()
+                }
+            })
+        }
+    </script>
+{% endblock javascript %}
+    

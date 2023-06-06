@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+import zoneinfo
 # from .forms import NameForm
 from .forms import (
     SellForm,
@@ -27,6 +27,7 @@ from authenticate.models import (
     AuctionItem,
     AuctionWishlist,
     Bid,
+    Transaction
 )
 from django.shortcuts import render, redirect
 from django.forms import modelformset_factory
@@ -125,6 +126,7 @@ def get_auction_item_price(request, item_id):
 def view_auction_item(request, auction_item_id):
     item = AuctionItem.objects.get(item_id=auction_item_id)
     bids = Bid.objects.filter(auction_item_id=auction_item_id).order_by("-bid_time")
+    print(item.end_time, timezone.localtime(timezone.now()))
     expired_flag = False
     if timezone.now() >= item.end_time:
         expired_flag = True
@@ -134,10 +136,17 @@ def view_auction_item(request, auction_item_id):
     if Payment.objects.filter(owner_id=request.user).exists():
         payment_exists = True
     print(payment_exists)
+    address_flag = True
+
+    if Address.objects.filter(user_id=request.user).exists():
+        address_flag = False
+        print("Address exists")
+
+    print(address_flag)
     return render(
         request,
         "auction_item.html",
-        {"item": item, "images": item.auctionimage_set.all(), 'payment_exists': payment_exists, 'expired_flag': expired_flag ,'bids': bids},
+        {"item": item, "images": item.auctionimage_set.all(), 'payment_exists': payment_exists, 'expired_flag': expired_flag, 'address_flag':address_flag ,'bids': bids},
     )
 
 
@@ -147,7 +156,10 @@ def view_item(request, item_id):
     raw_desc = item.item_description.split(";")
     for i in raw_desc:
         cat = i.split(":")
-        trans_desc[cat[0]] = cat[1]
+        try:
+            trans_desc[cat[0]] = cat[1]
+        except IndexError:
+            trans_desc["Content"] = i
     return render(
         request,
         "item.html",
@@ -387,6 +399,25 @@ def add_payment(request):
     print("I am here")
     return render(request, "add_payment.html", {"form": form})
 
+@login_required(login_url=login_url)
+def add_address(request):
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            print("form is valid")
+            f = form.save(commit=False)
+            f.user_id = request.user
+            f.save()
+            print(request.GET)
+            if request.GET.get('next', ''):
+                return HttpResponseRedirect(request.GET.get('next', ''))
+            return HttpResponseRedirect("/address_info")
+    form = AddressForm()
+    print("I am here")
+    return render(request, "add_address.html", {"form": form})
+
+
 
 def save_payment(request):
     if request.method == "POST":
@@ -426,6 +457,12 @@ def remove_card(request):
     payment_id = request.GET.get("payment_id", "")
     print("i am exec")
     data = {}
+    if request.GET.get('type','') == "address":
+        try:
+            Address.objects.get(pk=payment_id).delete()
+            data["success"] = True
+        except Exception:
+            return render(request, "error.html", {"error": "Address cannot be deleted"})
     try:
         Payment.objects.get(pk=payment_id, owner_id=request.user).delete()
         data["success"] = True
@@ -449,11 +486,16 @@ def remove_from_wish(request):
     messages.success(request, "Successfully removed the item from the wishlist")
     return JsonResponse(data)
 
-
+@login_required(login_url=login_url)
 def buy_requests(request):
     items = Order.objects.filter(seller_id=request.user, order_status=False)
     print(items)
     return render(request, "requests.html", {"items": items})
+
+@login_required(login_url=login_url)
+def auction_requests(request):
+    items = Transaction.objects.filter(seller_id=request.user, order_status=False)
+    return render(request, "auction_requests.html", {"items": items})
 
 
 def auction(request):
@@ -461,7 +503,7 @@ def auction(request):
     # Then use the is_auction_item attribute to mark the item as auction item
     return render(request, "auction.html")
 
-
+@login_required(login_url=login_url)
 def about(request):
     if request.method == "POST":
         profile_info = CustomerForm(request.POST, instance=request.user)
@@ -474,12 +516,17 @@ def about(request):
     profile_form = CustomerForm(instance=profile_info)
     return render(request, "about.html", {"profile_form": profile_form})
 
-
+@login_required(login_url=login_url)
 def history(request):
     items = Order.objects.filter(buyer_id=request.user).order_by("-created_at")
     print(items)
     return render(request, "history.html", {"items": items})
 
+@login_required(login_url=login_url)
+def auction_history(request):
+    items = Transaction.objects.filter(buyer_id=request.user).order_by("-transaction_time")
+    print(items)
+    return render(request, "auction_history.html", {"items": items})    
 
 @login_required(login_url=login_url)
 def view_order(request, order_id):
@@ -487,6 +534,11 @@ def view_order(request, order_id):
     req_order = Order.objects.get(order_id=order_id)
     print(req_order)
     return render(request, "order.html", {"i": req_order})
+
+@login_required(login_url=login_url)
+def view_auction_order(request, order_id):
+    req_order = Transaction.objects.get(item_id=order_id)
+    return render(request, "view_auction_order.html", {"i": req_order})
 
 
 @login_required(login_url=login_url)
@@ -510,7 +562,10 @@ def update_fulfillment(request):
     print("HI")
     data = {}
     order_id = request.GET.get("order_id", None)
-    order = Order.objects.get(order_id=order_id)
+    if request.GET.get("type", None) == "auction":
+        order = Transaction.objects.get(transaction_id=order_id)
+    else:
+        order = Order.objects.get(order_id=order_id)
     order.order_status = True
     order.save()
     data["success"] = True
@@ -523,8 +578,12 @@ def update_fulfillment(request):
 def update_dispatch(request):
     print("HI")
     data = {}
+
     order_id = request.GET.get("order_id", None)
-    order = Order.objects.get(order_id=order_id)
+    if request.GET.get("type", None) == "auction":
+        order = Transaction.objects.get(transaction_id=order_id)
+    else:
+        order = Order.objects.get(order_id=order_id)
     order.is_dispatched = True
     order.save()
     data["success"] = True
@@ -550,7 +609,10 @@ def payment(request):
     # print(payment_infos[0].card_number)
     return render(request, "payment.html", {"payment_forms": payment_infos})
 
-
+@login_required(login_url=login_url)
+def address(request):
+    address_infos = Address.objects.filter(user_id=request.user)
+    return render(request, "address.html", {"address_forms": address_infos})
 @login_required(login_url=login_url)
 def view_payment(request, payment_id):
     if request.method == "POST":
@@ -564,7 +626,19 @@ def view_payment(request, payment_id):
     form = PaymentForm(instance=item)
     return render(request, "view_payment.html", {"form": form})
 
+@login_required(login_url=login_url)
+def view_address(request, address_id):
+    if request.method == "POST":
+        item = Address.objects.get(address_id=address_id)
+        form = AddressForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("/address_info")
+    item = Address.objects.get(address_id=address_id)
+    form = AddressForm(instance=item)
+    return render(request, "add_address.html", {"form": form})
 
+@login_required(login_url=login_url)
 def postad(request):
     return render(request, "posting_ad.html")
 

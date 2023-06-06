@@ -13,6 +13,7 @@ from .models import (
     Address,
     AuctionImage,
     AuctionWishlist,
+    Transaction
 )
 
 
@@ -31,6 +32,8 @@ admin.site.register(Wishlist)
 admin.site.register(AuctionWishlist)
 admin.site.register(Address)
 admin.site.register(Payment)
+admin.site.register(Transaction)
+
 
 
 # class CustomerAdmin(admin.ModelAdmin):

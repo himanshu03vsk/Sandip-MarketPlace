@@ -1,66 +1,115 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block style %}
-
-    label{
-        width:20%;
+body {
+    margin: 0;
+    padding: 0;
+    {% comment %} display: flex; {% endcomment %}
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: transparent;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    box-shadow: 0 2px 4px rgba(208, 208, 208, 0.1);
+    
+  }
+  
+  .slogan {
+    width: 50%;
+    padding: 40px;
+    text-align: center;
+    opacity: 0;
+    animation: fade-in-left 1s ease-in-out forwards;
+    
+  }
+  
+  .slogan h1 {
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .slogan p {
+    font-size: 18px;
+    color: #666;
+  }
+  
+   .login-form {
+        width: 50%;
+        height:auto;
+        padding: 40px;
+        background-color: #f2f2f200;
+        opacity: 0;
+        animation: fade-in-right 1s ease-in-out forwards;
+      }
+  .login-form h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .login-form input[type="text"],
+  .login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .login-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .login-form input[type="submit"]:hover {
+    background-color: #555;
+  }
+  @keyframes fade-in-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
     }
-
-    body{
-        background-image: url({% static 'img/register-bg.jpg' %});
-        background-size: 100%;
-        background-repeat: no-repeat;
-        
+    to {
+      transform: translateX(0);
+      opacity: 1;
     }
-    #nav{
-        margin: auto;
+  }
+  
+  @keyframes fade-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
     }
-
-    .sub{
-        background-color: #1571bc;
-        margin-left: 50px;
-        margin-bottom: 20px;
+    to {
+      transform: translateX(0);
+      opacity: 1;
     }
-    .form-input{
-        width: 40%;
-        border-radius: 4px;
-        border-color:brown;
-        color: #000000;
-        margin-top: 20px;
-        margin-left: 20%
-    }
-
-    .container{
-        display: flex;
-        color: #000000;
-    }
-
-    .child{
-        width: 35%;
-        background-color:rgb(158 173 180 / 59%);
-        border-radius: 10px;
-        margin-right: 12px;
-        padding-left: 12px;
-    }
-
-    .dchild{
-        flex-grow: 1;
-        background-color: #00000082;
-        border-radius: 12px;
-    }
-    h2{
-
-        text-align: inherit;
-        color: #ffffff;
-        margin-top: 25%;
-
-    }
-
-    #buying{
-        background-color: #ffffff;
-        border-radius: 4px;
-        color: #000000;
-    }
+  }
+  nav{
+    background: ##2f2f2f;
+    border-bottom: 1px solid #e7d9d9;
+    background-size: cover;
+    color: #fff;
+    
+  
+  }
+  
 {% endblock style %}
 
 {% block nav %}
@@ -74,26 +123,23 @@
   </nav>{% endblock nav %}
   
 {% block body %}
+    
+
+
+
+
 {% if access_denied is True %} 
     <h2>You cannot view this page becuase you are already logged in</h2>
 {% else %}
-    
-<br>
+
 <div class="container">
-    <div class="child">
-    <form action="{% url 'user_registration' %}" method="post">
+    <div class="slogan">
+      <h1>Register yourself to enter the <br>world of simplicity and ease of <b id='buying'>buying</h1>
+      <p>Developed with love and dedication</p>
+    </div>
+    <div class="login-form">
+        <form action="{% url 'user_registration' %}" method="post">
         {% csrf_token %}
-       
-        {{form.email.label_tag}}{{form.email}}<br>
-        {{ form.user_id.label_tag }}{{ form.user_id }}<br>
-        {{form.fname.label_tag}}{{form.fname}}<br>
-        {{form.lname.label_tag}}{{form.lname}}<br>
-        {{form.password1.label_tag}}{{form.password1}}<br>
-        {{form.password2.label_tag}}{{form.password2}}<br>
-       
-        {{form.city.label_tag}}{{form.city}}<br>
-        {{form.country.label_tag}}{{form.country}}<br>
-        {{form.institute.label_tag}}{{form.institute}}<br>
         {% for field in form %}
         <p>
         {% for error in field.errors %}
@@ -106,15 +152,15 @@
             <p>{{form.non_field_errors}}</p>
         </div>
         {% endif %}
-          
-        <input class="form-input sub" type="submit" value="Submit">
-    </form>
+        
+        {{form.as_p}}<br>
+    
+    <button class="btn transparent-button pop-out-button" type="submit">Login</button>
+      </form>
     </div>
+  </div>
+<br>
 
-    <div class="dchild">
-        <h2>Register yourself to enter the <br>world of simplicity and ease of <b id='buying'>buying</b></h2>
-        </div>
-</div>
 {% endif %}
 {% endblock body %}
 

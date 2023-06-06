@@ -2,8 +2,9 @@
 
 
 {% block body %}
-    
-    {% for i in items %}
+{% for i in items %}
+<br>
+<div class='item-container'>
         <a href="{% url 'view_item' i.item_for_sale.item_id %}">{{i.item_for_sale}}</a><br>
         {{i.buyer_id}}<br>
         {{i.address}}<br>
@@ -14,9 +15,14 @@
         <div class=" deliver_q-{{i.order_id}}">   
             <h3>Is the order dispatched?</h3>
             <label class="form-check-label" for="update_status">Click this button if the order has been dispatched from you</label>
-            <button id="update_status" type="button" class="btn btn-primary" onclick="update_order({{i.order_id}})" >Update</button>
+            <button id="update_status" type="button" class="btn transparent-button pop-out-button" onclick="update_order({{i.order_id}})" >Update</button>
+            <br>
+            <br>
+
             {% comment %} <button type="button" id="update_status" value="update"> {% endcomment %}
         </div>
+      </div>
+
     <hr>
     <br>
 
